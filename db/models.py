@@ -68,8 +68,8 @@ class Ticket(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['movie_session', 'row', 'seat'],
-                name='unique_ticket_per_seat'
+                fields=["movie_session", "row", "seat"],
+                name="unique_ticket_per_seat"
             )
         ]
 
@@ -78,9 +78,11 @@ class Ticket(models.Model):
         if self.row < 1 or self.row > hall.rows:
             raise ValidationError(f"Row must be between 1 and {hall.rows}")
         if self.seat < 1 or self.seat > hall.seats_per_row:
-            raise ValidationError(f"Seat must be between 1 and {hall.seats_per_row}")
+            raise ValidationError(
+                f"Seat must be between 1 and "
+                f"{hall.seats_per_row}")
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         self.full_clean()
         super().save(*args, **kwargs)
 

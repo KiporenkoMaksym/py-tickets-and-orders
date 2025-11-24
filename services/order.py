@@ -1,11 +1,13 @@
 from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
+
 from db.models import Order, Ticket, MovieSession
 from django.db import transaction
 
 User = get_user_model()
 
 
-def create_order(tickets: list[dict], date=None) -> Order:
+def create_order(tickets: list[dict], date:None) -> Order:
     if not tickets:
         raise ValueError("Tickets list cannot be empty")
 
@@ -34,9 +36,8 @@ def create_order(tickets: list[dict], date=None) -> Order:
     return order
 
 
-def get_orders(username: str = None):
-
-    orders = Order.objects.all().order_by('-created_at')
+def get_orders(username: str = None) -> QuerySet:
+    orders = Order.objects.all().order_by("-created_at")
     if username:
         orders = orders.filter(user__username=username)
     return orders
