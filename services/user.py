@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from typing import Optional
+from typing import Any
 
 
 def create_user(
@@ -7,7 +8,7 @@ def create_user(
         password: str,
         email: str = None,
         first_name: str = None,
-        last_name: str = None) -> user:
+        last_name: str = None) -> Any:
     user = get_user_model()
     user_data = {"username": username, "password": password}
 
