@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from typing import Optional
 
 
 def create_user(
@@ -6,8 +7,8 @@ def create_user(
         password: str,
         email: str = None,
         first_name: str = None,
-        last_name: str = None):
-    User = get_user_model()
+        last_name: str = None) -> user:
+    user = get_user_model()
     user_data = {"username": username, "password": password}
 
     if email:
@@ -17,15 +18,15 @@ def create_user(
     if last_name:
         user_data["last_name"] = last_name
 
-    user = User.objects.create_user(**user_data)
+    user = user.objects.create_user(**user_data)
     return user
 
 
-def get_user(user_id: int):
-    User = get_user_model()
+def get_user(user_id: int) -> Optional[get_user_model()]:
+    user = get_user_model()
     try:
-        return User.objects.get(id=user_id)
-    except User.DoesNotExist:
+        return user.objects.get(id=user_id)
+    except user.DoesNotExist:
         return None
 
 
@@ -35,8 +36,8 @@ def update_user(
         password: str = None,
         email: str = None,
         first_name: str = None,
-        last_name: str = None):
-    User = get_user_model()
+        last_name: str = None) -> Optional[get_user_model()]:
+    user = get_user_model()
     user = get_user_model().objects.filter(id=user_id).first()
     if not user:
         return None
