@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 class Genre(models.Model):
@@ -29,8 +30,15 @@ class Movie(models.Model):
 
 
 class Order(models.Model):
-    crated_at = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
+
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"<Order: {self.created_at}>"
 
 
 class CinemaHall(models.Model):
@@ -60,8 +68,8 @@ class MovieSession(models.Model):
 
 
 class Ticket(models.Model):
-    movie_session = models.ForeignKey(MovieSession, on_delete=models.CASCADE)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    movie_session = models.ForeignKey(MovieSession, on_delete=models.CASCADE, related_name="tickets")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="tickets")
     row = models.IntegerField()
     seat = models.IntegerField()
 
@@ -73,14 +81,20 @@ class Ticket(models.Model):
             )
         ]
 
+    def __str__(self):
+        return (f"<Ticket: "
+                f"{self.movie_session.movie.title}"
+                f"{self.movie_session.show_time} (row: {self.row},"
+                f"seat: {self.seat})>")
+
     def clean(self) -> None:
         hall = self.movie_session.cinema_hall
         if self.row < 1 or self.row > hall.rows:
             raise ValidationError(f"Row must be between 1 and {hall.rows}")
-        if self.seat < 1 or self.seat > hall.seats_per_row:
+        if self.seat < 1 or self.seat > hall.seats_in_row:
             raise ValidationError(
                 f"Seat must be between 1 and "
-                f"{hall.seats_per_row}")
+                f"{hall.seats_in_row}")
 
     def save(self, *args, **kwargs) -> None:
         self.full_clean()

@@ -1,14 +1,13 @@
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
 
 def create_user(
         username: str,
         password: str,
         email: str = None,
         first_name: str = None,
-        last_name: str = None) -> User:
+        last_name: str = None):
+    User = get_user_model()
     user_data = {"username": username, "password": password}
 
     if email:
@@ -22,7 +21,8 @@ def create_user(
     return user
 
 
-def get_user(user_id: int) -> User:
+def get_user(user_id: int):
+    User = get_user_model()
     try:
         return User.objects.get(id=user_id)
     except User.DoesNotExist:
@@ -35,9 +35,9 @@ def update_user(
         password: str = None,
         email: str = None,
         first_name: str = None,
-        last_name: str = None
-) -> User:
-    user = get_user(user_id)
+        last_name: str = None):
+    User = get_user_model()
+    user = get_user_model().objects.filter(id=user_id).first()
     if not user:
         return None
 
