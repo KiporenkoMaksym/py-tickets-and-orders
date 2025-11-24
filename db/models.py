@@ -40,7 +40,7 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
-        return f"<Order: {self.created_at}>"
+        return f"<Order: {self.created_at.strftime('%Y-%m-%d %H:%M:%S')}>"
 
 
 class CinemaHall(models.Model):
@@ -90,10 +90,11 @@ class Ticket(models.Model):
         ]
 
     def __str__(self) -> str:
-        return (f"<Ticket: "
-                f"{self.movie_session.movie.title}"
-                f"{self.movie_session.show_time} (row: {self.row},"
-                f"seat: {self.seat})>")
+        show_time = self.movie_session.show_time.strftime('%Y-%m-%d %H:%M:%S')
+        return (
+            f"<Ticket: {self.movie_session.movie.title} "
+            f"{show_time} (row: {self.row}, seat: {self.seat})>"
+        )
 
     def clean(self) -> None:
         hall = self.movie_session.cinema_hall
