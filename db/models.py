@@ -90,7 +90,7 @@ class Ticket(models.Model):
         ]
 
     def __str__(self) -> str:
-        show_time = self.movie_session.show_time.strftime('%Y-%m-%d %H:%M:%S')
+        show_time = self.movie_session.show_time.strftime("%Y-%m-%d %H:%M:%S")
         return (
             f"<Ticket: {self.movie_session.movie.title} "
             f"{show_time} (row: {self.row}, seat: {self.seat})>"

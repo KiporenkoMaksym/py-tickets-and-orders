@@ -23,11 +23,11 @@ def create_user(
 
 
 def get_user(user_id: int) -> Optional[get_user_model()]:
-    User = get_user_model()
+    user_model = get_user_model()
+
     try:
-        user = User.objects.get(id=user_id)
-        return user
-    except User.DoesNotExist:
+        return user_model.objects.get(id=user_id)
+    except user_model.DoesNotExist:
         return None
 
 
@@ -38,9 +38,9 @@ def update_user(
         email: str = None,
         first_name: str = None,
         last_name: str = None) -> Optional[get_user_model()]:
-    User = get_user_model()
+    user_model = get_user_model()
     user = get_user(user_id)
-    if not user:
+    if not user_model:
         return None
 
     if username:

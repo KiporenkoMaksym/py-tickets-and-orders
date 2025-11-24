@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 @transaction.atomic
-def create_order(tickets: list[dict], username: str, date:None) -> Order:
+def create_order(tickets: list[dict], username: str, date: None) -> Order:
     if not tickets:
         raise ValueError("Tickets list cannot be empty")
 
