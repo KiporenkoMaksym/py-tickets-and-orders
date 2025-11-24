@@ -7,7 +7,7 @@ from django.db import transaction
 User = get_user_model()
 
 
-def create_order(tickets: list[dict], date:None) -> Order:
+def create_order(tickets: list[dict], date: None) -> Order:
     if not tickets:
         raise ValueError("Tickets list cannot be empty")
 
